@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Moon Theatre</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+        
+        body {
+            background: radial-gradient(circle at center, #0d0000, #000000);
+            color: #ff4444;
+            font-family: 'Crimson Text', serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            animation: subtleFlicker 3s infinite;
+            overflow-x: hidden;
+        }
+        
+        @keyframes subtleFlicker {
+            0%, 98% { opacity: 1; }
+            99% { opacity: 0.95; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes bloodDrip {
+            0% { transform: translateY(-10px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(20px); opacity: 0; }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+        
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(20, 0, 0, 0.95), rgba(40, 0, 0, 0.9));
+            border: 3px solid #8b0000;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.8);
+            position: relative;
+        }
+        
+        .game-container::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            background: #8b0000;
+            border-radius: 50%;
+            animation: bloodDrip 4s infinite;
+        }
+        
+        .title {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 10px rgba(255, 0, 0, 0.8);
+            color: #ff0000;
+            animation: shake 0.5s infinite;
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #ffaaaa;
+            font-size: 1.2em;
+        }
+        
+        .scene {
+            background: rgba(10, 0, 0, 0.95);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #8b0000;
+            line-height: 1.6;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9);
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            background: linear-gradient(90deg, rgba(139, 0, 0, 0.8), rgba(75, 0, 0, 0.8));
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #ff0000;
+        }
+        
+        .symbol-puzzle {
+            background: radial-gradient(circle, rgba(60, 0, 0, 0.9), rgba(20, 0, 0, 0.95));
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px dashed #ff0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+        
+        .symbols {
+            font-size: 2.5em;
+            text-align: center;
+            margin: 20px 0;
+            letter-spacing: 15px;
+            color: #ff0000;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+            animation: subtleFlicker 2s infinite;
+        }
+        
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .choice-btn {
+            background: linear-gradient(45deg, #8b0000, #660000);
+            color: #fff;
+            border: 2px solid #ff0000;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3);
+        }
+        
+        .choice-btn:hover {
+            background: linear-gradient(45deg, #aa0000, #880000);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255, 0, 0, 0.5);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        }
+        
+        .choice-btn:disabled {
+            background: #333;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .danger {
+            color: #ff0000;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
+        }
+        
+        .success {
+            color: #00ff00;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
+        }
+        
+        .warning {
+            color: #ffaa00;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 170, 0, 0.8);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .symbol-input {
+            background: rgba(0, 0, 0, 0.9);
+            color: #ff4444;
+            border: 2px solid #8b0000;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 1.2em;
+            width: 250px;
+            text-align: center;
+        }
+        
+        .cultist-speak {
+            font-style: italic;
+            color: #ff0000;
+            background: rgba(255, 0, 0, 0.1);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #8b0000;
+            font-size: 1.1em;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
+        
+        .restart-btn {
+            background: linear-gradient(45deg, #8b0000, #ff0000);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 20px;
+        }
+        
+        .restart-btn:hover {
+            background: linear-gradient(45deg, #ff0000, #ff4444);
+        }
+        
+        .horror-text {
+            color: #ff0000;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(255, 0, 0, 0.8);
+        }
+        
+        .whisper {
+            font-size: 0.9em;
+            color: #888;
+            font-style: italic;
+        }
+        
+        .scream {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            font-size: 1.5em;
+            color: #ff0000;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 1);
+            animation: shake 0.3s infinite;
+            letter-spacing: 1px;
+        }
+        
+        .blood-text {
+            color: #8b0000;
+            font-weight: bold;
+        }
+        
+        .jump-scare {
+            animation: shake 0.2s ease-in-out 0s 5;
+            background: rgba(255, 0, 0, 0.3) !important;
+            border: 3px solid #ff0000 !important;
+        }
+        
+        @media (max-width: 600px) {
+            .title {
+                font-size: 2em;
+            }
+            .symbols {
+                font-size: 2em;
+                letter-spacing: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="title">BLOOD MOON THEATRE</div>
+        <div class="subtitle">"The Flesh Remembers What the Mind Forgets"</div>
+        
+        <div class="status-bar">
+            <span>Terror: <span id="suspicion" class="danger">0/100</span></span>
+            <span>Forbidden Knowledge: <span id="knowledge">0/6</span></span>
+            <span>Hour: <span id="round">1</span></span>
+        </div>
+        
+        <div id="game-content">
+            <div class="scene" id="intro-scene">
+                <p>You regain consciousness on a cold, sticky floor. The metallic taste of blood fills your mouth. Around you, ancient theatre seats are stained with dark, dried substances that glisten in the candlelight.</p>
+                
+                <p>On stage, <span class="horror-text">grotesque figures in rotting animal pelts</span> perform a ritual around a stone altar. Fresh blood pools at its base. A figure wearing a fox skull turns toward you, empty eye sockets boring into your soul.</p>
+                
+                <p class="cultist-speak">"☠ ⸸ ☾ 🗡 ☠!" <span class="whisper">(The fox-skull raises a blade dripping with crimson)</span></p>
+                
+                <p>Horror floods through you as you realize the "audience" around you are not wearing masks—<span class="horror-text">their faces have been carved and stitched into animal forms</span>. One turns to you, flesh hanging loose from surgical scars, and you notice with growing dread that <span class="scream">you still have your human face</span>.</p>
+                
+                <p class="blood-text">You must learn their blasphemous tongue and join their ritual, or become the next sacrifice on their altar...</p>
+            </div>
+            
+            <div class="scene hidden" id="symbol-decode">
+                <h3 class="horror-text">Decipher the Blasphemy</h3>
+                <p>The cultists' unholy chanting fills the air. You must understand their meaning before they notice your confusion:</p>
+                
+                <div class="symbol-puzzle">
+                    <div class="cultist-speak" id="cultist-phrase">"☠ ⸸ ☾ 🗡 ☠!"</div>
+                    <p id="context-clue" class="whisper">The fox-skull raises a ceremonial blade, others begin chanting faster as blood drips from the altar.</p>
+                    
+                    <div class="symbols" id="symbol-options">
+                        ☠ = ? | ⸸ = ? | ☾ = ? | 🗡 = ?
+                    </div>
+                    
+                    <p class="horror-text">What blasphemous words do they speak?</p>
+                    <input type="text" class="symbol-input" id="decode-input" placeholder="Whisper your interpretation...">
+                    <button class="choice-btn" onclick="checkDecode()">Submit to the Darkness</button>
+                </div>
+            </div>
+            
+            <div class="scene hidden" id="action-choice">
+                <h3 id="situation-title" class="horror-text">The Ritual Demands Participation</h3>
+                <p id="situation-text">The cultists await your response. Choose wrongly and join the corpses beneath the stage:</p>
+                
+                <div class="choices">
+                    <button class="choice-btn" onclick="makeChoice('bow')">
+                        <strong>Prostrate yourself</strong> - Bow before their dark altar
+                    </button>
+                    <button class="choice-btn" onclick="makeChoice('gesture')">
+                        <strong>Mimic their movements</strong> - Copy their ritualistic gestures
+                    </button>
+                    <button class="choice-btn" onclick="makeChoice('speak')">
+                        <strong>Chant with them</strong> - Join their blasphemous prayer
+                    </button>
+                    <button class="choice-btn" onclick="makeChoice('wait')">
+                        <strong>Remain motionless</strong> - Hope they don't notice you
+                    </button>
+                </div>
+            </div>
+            
+            <div class="scene hidden" id="result">
+                <div id="result-content"></div>
+                <button class="choice-btn" onclick="nextRound()" id="continue-btn">Continue into Darkness</button>
+            </div>
+            
+            <div class="scene hidden" id="game-over">
+                <div id="game-over-content"></div>
+                <button class="restart-btn" onclick="restartGame()">Begin Another Nightmare</button>
+            </div>
+        </div>
+        
+        <button class="choice-btn" onclick="startGame()" id="start-btn">Enter the Theatre of Blood</button>
+    </div>
+
+    <script>
+        let gameState = {
+            suspicion: 0,
+            knowledge: 0,
+            round: 1,
+            symbols: {
+                '☠': 'death',
+                '⸸': 'demands',
+                '☾': 'moon',
+                '🗡': 'sacrifice',
+                '🕷': 'consume',
+                '👁': 'witness',
+                '🔥': 'burn',
+                '💀': 'skull',
+                '⚰': 'tomb',
+                '🩸': 'blood'
+            },
+            knownSymbols: {},
+            phrases: [
+                {
+                    text: '☠ ⸸ ☾ 🗡 ☠!',
+                    context: 'The fox-skull raises a ceremonial blade, others begin chanting faster as blood drips from the altar.',
+                    meaning: 'death demands moon sacrifice',
+                    correctActions: ['bow', 'speak'],
+                    wrongActions: ['gesture', 'wait']
+                },
+                {
+                    text: '🕷 👁 🔥 💀!',
+                    context: 'A figure with a sewn-on spider face points at you while others hold burning torches near human skulls.',
+                    meaning: 'consume witness with fire',
+                    correctActions: ['gesture', 'speak'],
+                    wrongActions: ['bow', 'wait']
+                },
+                {
+                    text: '⚰ 🩸 ☠ ⸸!',
+                    context: 'All cultists kneel before an open coffin filled with fresh blood, their stitched faces reflecting the crimson surface.',
+                    meaning: 'tomb blood death demands',
+                    correctActions: ['bow', 'speak'],
+                    wrongActions: ['gesture', 'wait']
+                }
+            ],
+            currentPhrase: 0,
+            horrorEvents: [
+                "A severed hand twitches on the floor near your feet...",
+                "You notice fresh surgical scars on your own arms that weren't there before...",
+                "The eye sockets of the skull-masked figure begin to bleed...",
+                "A child's laughter echoes from beneath the stage...",
+                "The temperature drops suddenly as frost forms on the blood-stained altar..."
+            ]
+        };
+
+        function updateDisplay() {
+            document.getElementById('suspicion').textContent = `${gameState.suspicion}/100`;
+            document.getElementById('knowledge').textContent = `${gameState.knowledge}/6`;
+            document.getElementById('round').textContent = gameState.round;
+            
+            if (gameState.suspicion >= 60) {
+                document.getElementById('suspicion').className = 'danger scream';
+            } else if (gameState.suspicion >= 30) {
+                document.getElementById('suspicion').className = 'warning';
+            }
+        }
+
+        function triggerJumpScare() {
+            const container = document.querySelector('.game-container');
+            container.classList.add('jump-scare');
+            setTimeout(() => {
+                container.classList.remove('jump-scare');
+            }, 1000);
+        }
+
+        function addHorrorEvent() {
+            if (Math.random() < 0.4) {
+                const event = gameState.horrorEvents[Math.floor(Math.random() * gameState.horrorEvents.length)];
+                return `<p class="whisper horror-text">${event}</p>`;
+            }
+            return '';
+        }
+
+        function startGame() {
+            document.getElementById('start-btn').style.display = 'none';
+            document.getElementById('intro-scene').classList.add('hidden');
+            document.getElementById('symbol-decode').classList.remove('hidden');
+            showCurrentPhrase();
+            triggerJumpScare();
+        }
+
+        function showCurrentPhrase() {
+            const phrase = gameState.phrases[gameState.currentPhrase];
+            document.getElementById('cultist-phrase').textContent = `"${phrase.text}"`;
+            document.getElementById('context-clue').innerHTML = phrase.context + addHorrorEvent();
+            document.getElementById('decode-input').value = '';
+        }
+
+        function checkDecode() {
+            const input = document.getElementById('decode-input').value.toLowerCase().trim();
+            const phrase = gameState.phrases[gameState.currentPhrase];
+            const correctMeaning = phrase.meaning.toLowerCase();
+            
+            const words = correctMeaning.split(' ');
+            let matches = 0;
+            
+            for (let word of words) {
+                if (input.includes(word)) {
+                    matches++;
+                }
+            }
+            
+            if (matches >= Math.ceil(words.length * 0.6)) {
+                gameState.knowledge += 1;
+                
+                phrase.text.split(' ').forEach(symbol => {
+                    const cleanSymbol = symbol.replace(/[!"]/g, '');
+                    if (gameState.symbols[cleanSymbol]) {
+                        gameState.knownSymbols[cleanSymbol] = gameState.symbols[cleanSymbol];
+                    }
+                });
+                
+                document.getElementById('symbol-decode').classList.add('hidden');
+                document.getElementById('action-choice').classList.remove('hidden');
+                
+                document.getElementById('situation-title').textContent = 'The Ritual Demands Blood';
+                document.getElementById('situation-text').innerHTML = 
+                    `<span class="success">You understand their dark tongue: "${phrase.meaning}"</span><br><br>` +
+                    `<span class="horror-text">The cultists turn their hollow gazes toward you. You must act now:</span>` +
+                    addHorrorEvent();
+                
+            } else {
+                gameState.suspicion += 20;
+                triggerJumpScare();
+                
+                if (gameState.suspicion >= 100) {
+                    gameOver('<span class="scream">Your confusion marks you as an outsider!</span><br><br>The cultists surge forward, surgical tools glinting in the candlelight. Your screams echo through the theatre as they prepare to remake your face in their image...<br><br><span class="blood-text">Your flesh will remember what your mind forgot.</span>');
+                    return;
+                }
+                
+                alert(`❌ WRONG! The cultists' eyes narrow behind their stitched flesh. Terror +20\n\n💀 Hint: ${phrase.context}\n\n🩸 Think about what they want...`);
+            }
+            
+            updateDisplay();
+        }
+
+        function makeChoice(action) {
+            const phrase = gameState.phrases[gameState.currentPhrase];
+            let resultText = '';
+            let suspicionChange = 0;
+            
+            if (phrase.correctActions.includes(action)) {
+                suspicionChange = -10;
+                gameState.knowledge += 1;
+                
+                switch(action) {
+                    case 'bow':
+                        resultText = '<span class="success">🙏 PERFECT!</span> Your submission pleases the dark entities. The cultists nod with approval, their sewn faces stretching grotesquely.';
+                        break;
+                    case 'gesture':
+                        resultText = '<span class="success">👹 EXCELLENT!</span> Your movements mirror their unholy ritual perfectly. Fresh blood drips from the altar in approval.';
+                        break;
+                    case 'speak':
+                        resultText = '<span class="success">🗣️ MAGNIFICENT!</span> Your voice joins their blasphemous chorus. The very air seems to thicken with dark power.';
+                        break;
+                }
+            } else {
+                suspicionChange = 25;
+                triggerJumpScare();
+                
+                switch(action) {
+                    case 'wait':
+                        resultText = '<span class="danger scream">💀 FATAL ERROR!</span> Your stillness brands you as an outsider! Multiple cultists turn their hollow gazes toward you, surgical scars stretching as they smile...';
+                        break;
+                    case 'bow':
+                        resultText = '<span class="danger scream">⚰️ WRONG CHOICE!</span> Your inappropriate reverence disturbs the ritual! The fox-skull figure raises its blade toward you...';
+                        break;
+                    case 'gesture':
+                        resultText = '<span class="danger scream">🔥 BLASPHEMY!</span> Your gestures mock their sacred rite! The temperature drops as their anger fills the theatre...';
+                        break;
+                    case 'speak':
+                        resultText = '<span class="danger scream">👁️ HERESY!</span> Your words defile their ceremony! Eyes begin to bleed behind their masks as they focus on you...';
+                        break;
+                }
+            }
+            
+            gameState.suspicion = Math.max(0, gameState.suspicion + suspicionChange);
+            
+            if (gameState.suspicion >= 100) {
+                gameOver('<span class="scream">THEY KNOW WHAT YOU ARE!</span><br><br>The cultists rise as one, their stitched faces contorting with rage. Surgical instruments gleam in their hands as they close in...<br><br><span class="blood-text">"Fresh meat for the altar," they whisper in unison.</span>');
+                return;
+            }
+            
+            document.getElementById('result-content').innerHTML = 
+                `<h3 class="horror-text">Hour ${gameState.round} - The Ritual Continues</h3>` +
+                `<p>${resultText}</p>` +
+                `<p class="blood-text">Terror: ${suspicionChange >= 0 ? '+' : ''}${suspicionChange}</p>` +
+                addHorrorEvent();
+            
+            document.getElementById('action-choice').classList.add('hidden');
+            document.getElementById('result').classList.remove('hidden');
+            
+            updateDisplay();
+        }
+
+        function nextRound() {
+            gameState.round++;
+            gameState.currentPhrase++;
+            
+            if (gameState.currentPhrase >= gameState.phrases.length || gameState.knowledge >= 6) {
+                victory();
+                return;
+            }
+            
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('symbol-decode').classList.remove('hidden');
+            showCurrentPhrase();
+        }
+
+        function victory() {
+            triggerJumpScare();
+            const winText = `
+                <h2 class="success horror-text">🎭 ASCENSION COMPLETE 🎭</h2>
+                <p>You have learned the forbidden tongue and earned your place among the damned...</p>
+                <p class="blood-text">The fox-skull figure approaches, carrying a surgical kit. "Welcome, initiate," it rasps through decaying vocal cords. "It's time for your transformation."</p>
+                <p class="cultist-speak">"☠ ⸸ ⚰ 🩸... Your face will join our collection."</p>
+                <p class="horror-text">As the blade touches your skin, you realize with growing horror that you're smiling. The theatre doors swing open, but you no longer wish to leave. You belong here now, among the beautiful monsters.</p>
+                <p class="whisper">Your reflection in the blade shows your face already changing...</p>
+                <p><strong class="blood-text">Final Corruption:</strong></p>
+                <p>Forbidden Knowledge: ${gameState.knowledge}/6</p>
+                <p>Terror Endured: ${gameState.suspicion}/100</p>
+                <p>Hours Survived: ${gameState.round}</p>
+                <p class="scream">Welcome to the Theatre of Blood.</p>
+            `;
+            
+            document.getElementById('game-over-content').innerHTML = winText;
+            document.getElementById('action-choice').classList.add('hidden');
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('game-over').classList.remove('hidden');
+        }
+
+        function gameOver(reason) {
+            triggerJumpScare();
+            const loseText = `
+                <h2 class="danger scream">💀 YOUR FLESH REMEMBERS 💀</h2>
+                <p class="horror-text">${reason}</p>
+                <p class="blood-text">The last thing you hear is the wet sound of surgical instruments and your own muffled screams. The theatre claims another victim for its eternal performance...</p>
+                <p><strong class="blood-text">Final Moments:</strong></p>
+                <p>Forbidden Knowledge: ${gameState.knowledge}/6</p>
+                <p>Terror Accumulated: ${gameState.suspicion}/100</p>
+                <p>Hours Survived: ${gameState.round}</p>
+                <p class="whisper horror-text">Your face will make a beautiful addition to their collection...</p>
+                <p class="scream">Try again... if you dare return to the darkness.</p>
+            `;
+            
+            document.getElementById('game-over-content').innerHTML = loseText;
+            document.getElementById('symbol-decode').classList.add('hidden');
+            document.getElementById('action-choice').classList.add('hidden');
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('game-over').classList.remove('hidden');
+        }
+
+        function restartGame() {
+            gameState = {
+                suspicion: 0,
+                knowledge: 0,
+                round: 1,
+                symbols: {
+                    '☠': 'death',
+                    '⸸': 'demands',
+                    '☾': 'moon',
+                    '🗡': 'sacrifice',
+                    '🕷': 'consume',
+                    '👁': 'witness',
+                    '🔥': 'burn',
+                    '💀': 'skull',
+                    '⚰': 'tomb',
+                    '🩸': 'blood'
+                },
+                knownSymbols: {},
+                phrases: [
+                    {
+                        text: '☠ ⸸ ☾ 🗡 ☠!',
+                        context: 'The fox-skull raises a ceremonial blade, others begin chanting faster as blood drips from the altar.',
+                        meaning: 'death demands moon sacrifice',
+                        correctActions: ['bow', 'speak'],
+                        wrongActions: ['gesture', 'wait']
+                    },
+                    {
+                        text: '🕷 👁 🔥 💀!',
+                        context: 'A figure with a sewn-on spider face points at you while others hold burning torches near human skulls.',
+                        meaning: 'consume witness with fire',
+                        correctActions: ['gesture', 'speak'],
+                        wrongActions: ['bow', 'wait']
+                    },
+                    {
+                        text: '⚰ 🩸 ☠ ⸸!',
+                        context: 'All cultists kneel before an open coffin filled with fresh blood, their stitched faces reflecting the crimson surface.',
+                        meaning: 'tomb blood death demands',
+                        correctActions: ['bow', 'speak'],
+                        wrongActions: ['gesture', 'wait']
+                    }
+                ],
+                currentPhrase: 0,
+                horrorEvents: [
+                    "A severed hand twitches on the floor near your feet...",
+                    "You notice fresh surgical scars on your own arms that weren't there before...",
+                    "The eye sockets of the skull-masked figure begin to bleed...",
+                    "A child's laughter echoes from beneath the stage...",
+                    "The temperature drops suddenly as frost forms on the blood-stained altar..."
+                ]
+            };
+            
+            document.getElementById('game-over').classList.add('hidden');
+            document.getElementById('intro-scene').classList.remove('hidden');
+            document.getElementById('start-btn').style.display = 'block';
+            updateDisplay();
+        }
+
+        // Initialize display
+        updateDisplay();
+
+        // Random horror ambience
+        setInterval(() => {
+            if (Math.random() < 0.1) {
+                document.body.style.animation = 'subtleFlicker 0.1s ease-in-out';
+                setTimeout(() => {
+                    document.body.style.animation = 'subtleFlicker 3s infinite';
+                }, 100);
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
