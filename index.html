@@ -37,7 +37,7 @@
         }
         
         .game-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background: linear-gradient(135deg, rgba(20, 0, 0, 0.95), rgba(40, 0, 0, 0.9));
             border: 3px solid #8b0000;
@@ -99,25 +99,6 @@
             border: 1px solid #ff0000;
         }
         
-        .symbol-puzzle {
-            background: radial-gradient(circle, rgba(60, 0, 0, 0.9), rgba(20, 0, 0, 0.95));
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: 2px dashed #ff0000;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
-        }
-        
-        .symbols {
-            font-size: 2.5em;
-            text-align: center;
-            margin: 20px 0;
-            letter-spacing: 15px;
-            color: #ff0000;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
-            animation: subtleFlicker 2s infinite;
-        }
-        
         .choices {
             display: flex;
             flex-direction: column;
@@ -135,6 +116,7 @@
             font-size: 1.1em;
             transition: all 0.3s ease;
             box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3);
+            text-align: left;
         }
         
         .choice-btn:hover {
@@ -170,17 +152,6 @@
         
         .hidden {
             display: none;
-        }
-        
-        .symbol-input {
-            background: rgba(0, 0, 0, 0.9);
-            color: #ff4444;
-            border: 2px solid #8b0000;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 1.2em;
-            width: 250px;
-            text-align: center;
         }
         
         .cultist-speak {
@@ -243,13 +214,18 @@
             border: 3px solid #ff0000 !important;
         }
         
+        .gore-warning {
+            background: rgba(255, 0, 0, 0.2);
+            border: 2px solid #ff0000;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
         @media (max-width: 600px) {
             .title {
                 font-size: 2em;
-            }
-            .symbols {
-                font-size: 2em;
-                letter-spacing: 10px;
             }
         }
     </style>
@@ -259,66 +235,42 @@
         <div class="title">BLOOD MOON THEATRE</div>
         <div class="subtitle">"The Flesh Remembers What the Mind Forgets"</div>
         
+        <div class="gore-warning">
+            <p class="horror-text">⚠️ WARNING: EXTREME HORROR CONTENT ⚠️</p>
+            <p class="whisper">This experience contains graphic violence, gore, and disturbing imagery</p>
+        </div>
+        
         <div class="status-bar">
             <span>Terror: <span id="suspicion" class="danger">0/100</span></span>
-            <span>Forbidden Knowledge: <span id="knowledge">0/6</span></span>
+            <span>Survival: <span id="survival">100/100</span></span>
             <span>Hour: <span id="round">1</span></span>
         </div>
         
         <div id="game-content">
             <div class="scene" id="intro-scene">
-                <p>You regain consciousness on a cold, sticky floor. The metallic taste of blood fills your mouth. Around you, ancient theatre seats are stained with dark, dried substances that glisten in the candlelight.</p>
+                <p>You regain consciousness on a cold, sticky floor that reeks of copper and decay. The metallic taste of blood fills your mouth, and you realize with growing horror that <span class="horror-text">chunks of flesh are stuck between your teeth</span>. Around you, ancient theatre seats are stained with dark, dried substances that still glisten wetly in the candlelight.</p>
                 
-                <p>On stage, <span class="horror-text">grotesque figures in rotting animal pelts</span> perform a ritual around a stone altar. Fresh blood pools at its base. A figure wearing a fox skull turns toward you, empty eye sockets boring into your soul.</p>
+                <p>On stage, <span class="horror-text">grotesque figures in rotting animal pelts</span> perform a ritual around a stone altar. Fresh entrails spill from its edges, and you can see the twitching remains of what was once human. A figure wearing a fox skull turns toward you, maggots spilling from its empty eye sockets.</p>
                 
-                <p class="cultist-speak">"☠ ⸸ ☾ 🗡 ☠!" <span class="whisper">(The fox-skull raises a blade dripping with crimson)</span></p>
+                <p class="cultist-speak">"New meat has awakened... the harvest shall continue."</p>
                 
-                <p>Horror floods through you as you realize the "audience" around you are not wearing masks—<span class="horror-text">their faces have been carved and stitched into animal forms</span>. One turns to you, flesh hanging loose from surgical scars, and you notice with growing dread that <span class="scream">you still have your human face</span>.</p>
+                <p>Horror floods through you as you realize the "audience" around you are not wearing masks—<span class="horror-text">their faces have been surgically replaced with animal heads, flesh rotting and peeling at the seams</span>. One turns to you, revealing where its jaw has been sawed off and replaced with a crow's beak. You notice with growing dread that <span class="scream">you still have your human face... for now</span>.</p>
                 
-                <p class="blood-text">You must learn their blasphemous tongue and join their ritual, or become the next sacrifice on their altar...</p>
+                <p class="blood-text">The fox-skull figure raises a rusty bone saw, its teeth caked with dried brain matter. "Soon, you will be beautiful like us. The transformation is... exquisite."</p>
             </div>
             
-            <div class="scene hidden" id="symbol-decode">
-                <h3 class="horror-text">Decipher the Blasphemy</h3>
-                <p>The cultists' unholy chanting fills the air. You must understand their meaning before they notice your confusion:</p>
+            <div class="scene hidden" id="question-scene">
+                <h3 class="horror-text" id="question-title">The Ritual Begins</h3>
+                <p id="question-text">Choose your response carefully - wrong answers lead to immediate... modifications.</p>
                 
-                <div class="symbol-puzzle">
-                    <div class="cultist-speak" id="cultist-phrase">"☠ ⸸ ☾ 🗡 ☠!"</div>
-                    <p id="context-clue" class="whisper">The fox-skull raises a ceremonial blade, others begin chanting faster as blood drips from the altar.</p>
-                    
-                    <div class="symbols" id="symbol-options">
-                        ☠ = ? | ⸸ = ? | ☾ = ? | 🗡 = ?
-                    </div>
-                    
-                    <p class="horror-text">What blasphemous words do they speak?</p>
-                    <input type="text" class="symbol-input" id="decode-input" placeholder="Whisper your interpretation...">
-                    <button class="choice-btn" onclick="checkDecode()">Submit to the Darkness</button>
-                </div>
-            </div>
-            
-            <div class="scene hidden" id="action-choice">
-                <h3 id="situation-title" class="horror-text">The Ritual Demands Participation</h3>
-                <p id="situation-text">The cultists await your response. Choose wrongly and join the corpses beneath the stage:</p>
-                
-                <div class="choices">
-                    <button class="choice-btn" onclick="makeChoice('bow')">
-                        <strong>Prostrate yourself</strong> - Bow before their dark altar
-                    </button>
-                    <button class="choice-btn" onclick="makeChoice('gesture')">
-                        <strong>Mimic their movements</strong> - Copy their ritualistic gestures
-                    </button>
-                    <button class="choice-btn" onclick="makeChoice('speak')">
-                        <strong>Chant with them</strong> - Join their blasphemous prayer
-                    </button>
-                    <button class="choice-btn" onclick="makeChoice('wait')">
-                        <strong>Remain motionless</strong> - Hope they don't notice you
-                    </button>
+                <div class="choices" id="question-choices">
+                    <!-- Choices will be populated by JavaScript -->
                 </div>
             </div>
             
             <div class="scene hidden" id="result">
                 <div id="result-content"></div>
-                <button class="choice-btn" onclick="nextRound()" id="continue-btn">Continue into Darkness</button>
+                <button class="choice-btn" onclick="nextRound()" id="continue-btn">Descend Deeper</button>
             </div>
             
             <div class="scene hidden" id="game-over">
@@ -333,63 +285,101 @@
     <script>
         let gameState = {
             suspicion: 0,
-            knowledge: 0,
+            survival: 100,
             round: 1,
-            symbols: {
-                '☠': 'death',
-                '⸸': 'demands',
-                '☾': 'moon',
-                '🗡': 'sacrifice',
-                '🕷': 'consume',
-                '👁': 'witness',
-                '🔥': 'burn',
-                '💀': 'skull',
-                '⚰': 'tomb',
-                '🩸': 'blood'
-            },
-            knownSymbols: {},
-            phrases: [
+            currentQuestionIndex: 0,
+            questions: [
                 {
-                    text: '☠ ⸸ ☾ 🗡 ☠!',
-                    context: 'The fox-skull raises a ceremonial blade, others begin chanting faster as blood drips from the altar.',
-                    meaning: 'death demands moon sacrifice',
-                    correctActions: ['bow', 'speak'],
-                    wrongActions: ['gesture', 'wait']
+                    title: "The Fox-Skull's First Test",
+                    text: "The fox-skull creature approaches with a tray of surgical instruments. <span class='horror-text'>Fresh blood drips from each tool</span>. It speaks: 'Choose your instrument of enlightenment, new flesh.'",
+                    choices: [
+                        { text: "🔪 The bone saw (still warm with use)", correct: true, response: "The fox-skull nods approvingly. 'You understand the beauty of separation. Good.'" },
+                        { text: "🪓 The rusty hatchet (chunks of scalp still attached)", correct: false, response: "The fox-skull shrieks! 'Crude tools for crude minds!' Your left pinky is severed as punishment." },
+                        { text: "⚰️ The embalming needle (dripping formaldehyde)", correct: true, response: "A wise choice. 'Preservation before transformation,' the creature whispers approvingly." },
+                        { text: "🔥 Refuse to choose", correct: false, response: "Your hesitation costs you dearly. The creature's claws rake across your face, leaving deep gouges." }
+                    ]
                 },
                 {
-                    text: '🕷 👁 🔥 💀!',
-                    context: 'A figure with a sewn-on spider face points at you while others hold burning torches near human skulls.',
-                    meaning: 'consume witness with fire',
-                    correctActions: ['gesture', 'speak'],
-                    wrongActions: ['bow', 'wait']
+                    title: "The Altar's Demand",
+                    text: "You are led to the altar where <span class='horror-text'>a still-beating human heart sits in a pool of steaming blood</span>. Around it, various organs twitch with unnatural life. The cultists chant: 'Feed the altar, join the collective.'",
+                    choices: [
+                        { text: "🫀 Touch the beating heart", correct: true, response: "The heart's rhythm synchronizes with yours. Power flows through you as the cultists nod." },
+                        { text: "🧠 Examine the exposed brain nearby", correct: false, response: "The brain suddenly screams! Its shriek pierces your eardrums, blood pours from your ears." },
+                        { text: "👁️ Look into the collection of eyeballs", correct: false, response: "The eyes all turn to stare at you simultaneously. You feel your sanity slipping away." },
+                        { text: "🩸 Drink from the blood pool", correct: true, response: "The metallic taste brings visions of truth. You see the theatre's dark history unfold." }
+                    ]
                 },
                 {
-                    text: '⚰ 🩸 ☠ ⸸!',
-                    context: 'All cultists kneel before an open coffin filled with fresh blood, their stitched faces reflecting the crimson surface.',
-                    meaning: 'tomb blood death demands',
-                    correctActions: ['bow', 'speak'],
-                    wrongActions: ['gesture', 'wait']
+                    title: "The Transformation Chamber",
+                    text: "You descend into the theatre's basement where <span class='horror-text'>dozens of surgery tables are occupied by writhing, half-transformed victims</span>. Their screams echo endlessly. A creature with a deer skull asks: 'What flesh would you trade for enlightenment?'",
+                    choices: [
+                        { text: "👂 Offer your ears ('Hearing is overrated')", correct: true, response: "The deer-skull carefully removes your ears with practiced skill. The silence is... peaceful." },
+                        { text: "👁️ Offer your eyes ('Vision clouds truth')", correct: false, response: "Wrong choice! Your eyes are burned out with hot pokers, but you're kept barely alive." },
+                        { text: "👅 Offer your tongue ('Speech is weakness')", correct: true, response: "Your tongue is severed with surgical precision. Blood flows, but you feel... liberated." },
+                        { text: "🤚 Try to escape", correct: false, response: "Foolish! Your legs are shattered with hammers, ensuring you'll never run again." }
+                    ]
+                },
+                {
+                    title: "The Bone Garden",
+                    text: "Deep beneath the theatre lies a garden of human bones arranged in twisted trees. <span class='horror-text'>Skulls hang like fruit, and femurs form grotesque branches</span>. The gardener, a figure with multiple faces sewn together, asks: 'Which tree bears the sweetest fruit?'",
+                    choices: [
+                        { text: "🌳 The tree of children's bones", correct: false, response: "You monster! The gardener flays strips of skin from your back as punishment for your evil." },
+                        { text: "💀 The skull tree (adult victims)", correct: true, response: "The gardener smiles with all its faces. 'Wisdom in your choice. These deaths had meaning.'" },
+                        { text: "🦴 The tree of sacrifice (willing victims)", correct: true, response: "Perfect! The gardener grants you a skull to carry - a token of understanding." },
+                        { text: "🔥 Burn the entire garden", correct: false, response: "Sacrilege! Your hands are dipped in molten metal, fusing your fingers together permanently." }
+                    ]
+                },
+                {
+                    title: "The Mirror of Truth",
+                    text: "You find yourself before an ancient mirror that shows not your reflection, but <span class='horror-text'>what you will become after complete transformation</span>. The image is horrifying yet strangely beautiful. A voice echoes: 'Do you accept your true form?'",
+                    choices: [
+                        { text: "🪞 Embrace the reflection", correct: true, response: "You feel your bones beginning to reshape. The pain is exquisite as your true form emerges." },
+                        { text: "💔 Reject your destiny", correct: false, response: "The mirror shatters, each shard cutting deep into your flesh. You bleed from a thousand wounds." },
+                        { text: "👹 Ask to see more transformations", correct: true, response: "The mirror shows you the beauty of all possible forms. You understand the gift being offered." },
+                        { text: "🔨 Try to destroy the mirror", correct: false, response: "The mirror is unbreakable! Your fists are pulverized against its surface, bones jutting through skin." }
+                    ]
+                },
+                {
+                    title: "The Final Choice",
+                    text: "You stand before the Master of the Theatre, a towering figure whose body is a patchwork of hundreds of different victims. <span class='horror-text'>Eyes blink from its chest, mouths whisper from its arms</span>. It speaks with a thousand voices: 'Join us willingly, or be harvested slowly.'",
+                    choices: [
+                        { text: "🙏 Kneel and accept transformation", correct: true, response: "Excellent! Your transformation begins immediately. You feel yourself becoming something beautiful and terrible." },
+                        { text: "⚔️ Challenge the Master to combat", correct: false, response: "Foolish! You are torn apart slowly, your screams adding to its symphony of voices." },
+                        { text: "🤝 Offer to help with future victims", correct: true, response: "The Master smiles with dozens of mouths. 'A true partner in our work of art.'" },
+                        { text: "🏃 Make one final escape attempt", correct: false, response: "There is no escape from perfection! Your spine is severed, and you're kept as a living decoration." }
+                    ]
                 }
             ],
-            currentPhrase: 0,
             horrorEvents: [
-                "A severed hand twitches on the floor near your feet...",
-                "You notice fresh surgical scars on your own arms that weren't there before...",
-                "The eye sockets of the skull-masked figure begin to bleed...",
-                "A child's laughter echoes from beneath the stage...",
-                "The temperature drops suddenly as frost forms on the blood-stained altar..."
+                "A child's fingernail scratches at the underside of the floorboards...",
+                "You feel something wet dripping on your head - looking up reveals a corpse nailed to the ceiling...",
+                "Your reflection in a nearby puddle of blood shows someone else's face staring back...",
+                "The temperature drops suddenly as the breath of the dead whispers past your ear...",
+                "A severed hand crawls across the floor, leaving bloody fingerprints in its wake...",
+                "You hear your own voice screaming from somewhere deeper in the theatre...",
+                "The walls begin to bleed fresh blood that spells out your name...",
+                "A figure identical to you walks past, but they're missing their skin...",
+                "You realize you've been unconsciously humming along to the screams of the tortured..."
             ]
         };
 
         function updateDisplay() {
             document.getElementById('suspicion').textContent = `${gameState.suspicion}/100`;
-            document.getElementById('knowledge').textContent = `${gameState.knowledge}/6`;
+            document.getElementById('survival').textContent = `${gameState.survival}/100`;
             document.getElementById('round').textContent = gameState.round;
             
-            if (gameState.suspicion >= 60) {
+            if (gameState.suspicion >= 80) {
                 document.getElementById('suspicion').className = 'danger scream';
-            } else if (gameState.suspicion >= 30) {
+            } else if (gameState.suspicion >= 50) {
                 document.getElementById('suspicion').className = 'warning';
+            }
+            
+            if (gameState.survival <= 20) {
+                document.getElementById('survival').className = 'danger scream';
+            } else if (gameState.survival <= 50) {
+                document.getElementById('survival').className = 'warning';
+            } else {
+                document.getElementById('survival').className = 'success';
             }
         }
 
@@ -402,7 +392,7 @@
         }
 
         function addHorrorEvent() {
-            if (Math.random() < 0.4) {
+            if (Math.random() < 0.6) {
                 const event = gameState.horrorEvents[Math.floor(Math.random() * gameState.horrorEvents.length)];
                 return `<p class="whisper horror-text">${event}</p>`;
             }
@@ -412,120 +402,69 @@
         function startGame() {
             document.getElementById('start-btn').style.display = 'none';
             document.getElementById('intro-scene').classList.add('hidden');
-            document.getElementById('symbol-decode').classList.remove('hidden');
-            showCurrentPhrase();
+            document.getElementById('question-scene').classList.remove('hidden');
+            showCurrentQuestion();
             triggerJumpScare();
         }
 
-        function showCurrentPhrase() {
-            const phrase = gameState.phrases[gameState.currentPhrase];
-            document.getElementById('cultist-phrase').textContent = `"${phrase.text}"`;
-            document.getElementById('context-clue').innerHTML = phrase.context + addHorrorEvent();
-            document.getElementById('decode-input').value = '';
+        function showCurrentQuestion() {
+            const question = gameState.questions[gameState.currentQuestionIndex];
+            document.getElementById('question-title').innerHTML = question.title;
+            document.getElementById('question-text').innerHTML = question.text + addHorrorEvent();
+            
+            const choicesContainer = document.getElementById('question-choices');
+            choicesContainer.innerHTML = '';
+            
+            question.choices.forEach((choice, index) => {
+                const button = document.createElement('button');
+                button.className = 'choice-btn';
+                button.innerHTML = choice.text;
+                button.onclick = () => makeChoice(index);
+                choicesContainer.appendChild(button);
+            });
         }
 
-        function checkDecode() {
-            const input = document.getElementById('decode-input').value.toLowerCase().trim();
-            const phrase = gameState.phrases[gameState.currentPhrase];
-            const correctMeaning = phrase.meaning.toLowerCase();
-            
-            const words = correctMeaning.split(' ');
-            let matches = 0;
-            
-            for (let word of words) {
-                if (input.includes(word)) {
-                    matches++;
-                }
-            }
-            
-            if (matches >= Math.ceil(words.length * 0.6)) {
-                gameState.knowledge += 1;
-                
-                phrase.text.split(' ').forEach(symbol => {
-                    const cleanSymbol = symbol.replace(/[!"]/g, '');
-                    if (gameState.symbols[cleanSymbol]) {
-                        gameState.knownSymbols[cleanSymbol] = gameState.symbols[cleanSymbol];
-                    }
-                });
-                
-                document.getElementById('symbol-decode').classList.add('hidden');
-                document.getElementById('action-choice').classList.remove('hidden');
-                
-                document.getElementById('situation-title').textContent = 'The Ritual Demands Blood';
-                document.getElementById('situation-text').innerHTML = 
-                    `<span class="success">You understand their dark tongue: "${phrase.meaning}"</span><br><br>` +
-                    `<span class="horror-text">The cultists turn their hollow gazes toward you. You must act now:</span>` +
-                    addHorrorEvent();
-                
-            } else {
-                gameState.suspicion += 20;
-                triggerJumpScare();
-                
-                if (gameState.suspicion >= 100) {
-                    gameOver('<span class="scream">Your confusion marks you as an outsider!</span><br><br>The cultists surge forward, surgical tools glinting in the candlelight. Your screams echo through the theatre as they prepare to remake your face in their image...<br><br><span class="blood-text">Your flesh will remember what your mind forgot.</span>');
-                    return;
-                }
-                
-                alert(`❌ WRONG! The cultists' eyes narrow behind their stitched flesh. Terror +20\n\n💀 Hint: ${phrase.context}\n\n🩸 Think about what they want...`);
-            }
-            
-            updateDisplay();
-        }
-
-        function makeChoice(action) {
-            const phrase = gameState.phrases[gameState.currentPhrase];
+        function makeChoice(choiceIndex) {
+            const question = gameState.questions[gameState.currentQuestionIndex];
+            const choice = question.choices[choiceIndex];
             let resultText = '';
             let suspicionChange = 0;
+            let survivalChange = 0;
             
-            if (phrase.correctActions.includes(action)) {
-                suspicionChange = -10;
-                gameState.knowledge += 1;
-                
-                switch(action) {
-                    case 'bow':
-                        resultText = '<span class="success">🙏 PERFECT!</span> Your submission pleases the dark entities. The cultists nod with approval, their sewn faces stretching grotesquely.';
-                        break;
-                    case 'gesture':
-                        resultText = '<span class="success">👹 EXCELLENT!</span> Your movements mirror their unholy ritual perfectly. Fresh blood drips from the altar in approval.';
-                        break;
-                    case 'speak':
-                        resultText = '<span class="success">🗣️ MAGNIFICENT!</span> Your voice joins their blasphemous chorus. The very air seems to thicken with dark power.';
-                        break;
-                }
+            if (choice.correct) {
+                suspicionChange = -5;
+                survivalChange = Math.random() > 0.5 ? -5 : 0; // Sometimes even correct choices have consequences
+                resultText = `<span class="success">✓ ACCEPTED!</span> ${choice.response}`;
             } else {
-                suspicionChange = 25;
+                suspicionChange = 20;
+                survivalChange = -15;
                 triggerJumpScare();
-                
-                switch(action) {
-                    case 'wait':
-                        resultText = '<span class="danger scream">💀 FATAL ERROR!</span> Your stillness brands you as an outsider! Multiple cultists turn their hollow gazes toward you, surgical scars stretching as they smile...';
-                        break;
-                    case 'bow':
-                        resultText = '<span class="danger scream">⚰️ WRONG CHOICE!</span> Your inappropriate reverence disturbs the ritual! The fox-skull figure raises its blade toward you...';
-                        break;
-                    case 'gesture':
-                        resultText = '<span class="danger scream">🔥 BLASPHEMY!</span> Your gestures mock their sacred rite! The temperature drops as their anger fills the theatre...';
-                        break;
-                    case 'speak':
-                        resultText = '<span class="danger scream">👁️ HERESY!</span> Your words defile their ceremony! Eyes begin to bleed behind their masks as they focus on you...';
-                        break;
-                }
+                resultText = `<span class="danger scream">✗ WRONG CHOICE!</span> ${choice.response}`;
             }
             
-            gameState.suspicion = Math.max(0, gameState.suspicion + suspicionChange);
+            gameState.suspicion = Math.max(0, Math.min(100, gameState.suspicion + suspicionChange));
+            gameState.survival = Math.max(0, Math.min(100, gameState.survival + survivalChange));
+            
+            if (gameState.survival <= 0) {
+                gameOver('<span class="scream">YOUR BODY FAILS!</span><br><br>The accumulated damage is too much. You collapse as your life ebbs away, becoming just another decoration in the theatre of horrors...<br><br><span class="blood-text">Your corpse will serve the theatre well.</span>');
+                return;
+            }
             
             if (gameState.suspicion >= 100) {
-                gameOver('<span class="scream">THEY KNOW WHAT YOU ARE!</span><br><br>The cultists rise as one, their stitched faces contorting with rage. Surgical instruments gleam in their hands as they close in...<br><br><span class="blood-text">"Fresh meat for the altar," they whisper in unison.</span>');
+                gameOver('<span class="scream">THEY KNOW YOU DON\'T BELONG!</span><br><br>The cultists surge forward with surgical instruments gleaming. Your screams echo through the theatre as they begin your involuntary transformation...<br><br><span class="blood-text">Your face will make a beautiful addition to their collection.</span>');
                 return;
             }
             
             document.getElementById('result-content').innerHTML = 
-                `<h3 class="horror-text">Hour ${gameState.round} - The Ritual Continues</h3>` +
+                `<h3 class="horror-text">Hour ${gameState.round} - The Horror Deepens</h3>` +
                 `<p>${resultText}</p>` +
-                `<p class="blood-text">Terror: ${suspicionChange >= 0 ? '+' : ''}${suspicionChange}</p>` +
+                `<div class="blood-text">` +
+                `<p>Terror: ${suspicionChange >= 0 ? '+' : ''}${suspicionChange}</p>` +
+                `<p>Survival: ${survivalChange >= 0 ? '+' : ''}${survivalChange}</p>` +
+                `</div>` +
                 addHorrorEvent();
             
-            document.getElementById('action-choice').classList.add('hidden');
+            document.getElementById('question-scene').classList.add('hidden');
             document.getElementById('result').classList.remove('hidden');
             
             updateDisplay();
@@ -533,36 +472,36 @@
 
         function nextRound() {
             gameState.round++;
-            gameState.currentPhrase++;
+            gameState.currentQuestionIndex++;
             
-            if (gameState.currentPhrase >= gameState.phrases.length || gameState.knowledge >= 6) {
+            if (gameState.currentQuestionIndex >= gameState.questions.length) {
                 victory();
                 return;
             }
             
             document.getElementById('result').classList.add('hidden');
-            document.getElementById('symbol-decode').classList.remove('hidden');
-            showCurrentPhrase();
+            document.getElementById('question-scene').classList.remove('hidden');
+            showCurrentQuestion();
         }
 
         function victory() {
             triggerJumpScare();
             const winText = `
-                <h2 class="success horror-text">🎭 ASCENSION COMPLETE 🎭</h2>
-                <p>You have learned the forbidden tongue and earned your place among the damned...</p>
-                <p class="blood-text">The fox-skull figure approaches, carrying a surgical kit. "Welcome, initiate," it rasps through decaying vocal cords. "It's time for your transformation."</p>
-                <p class="cultist-speak">"☠ ⸸ ⚰ 🩸... Your face will join our collection."</p>
-                <p class="horror-text">As the blade touches your skin, you realize with growing horror that you're smiling. The theatre doors swing open, but you no longer wish to leave. You belong here now, among the beautiful monsters.</p>
-                <p class="whisper">Your reflection in the blade shows your face already changing...</p>
-                <p><strong class="blood-text">Final Corruption:</strong></p>
-                <p>Forbidden Knowledge: ${gameState.knowledge}/6</p>
+                <h2 class="success horror-text">🎭 TRANSFORMATION COMPLETE 🎭</h2>
+                <p class="horror-text">You have proven worthy of the ultimate gift...</p>
+                <p class="blood-text">The Master approaches with the final surgical instruments. Your screams of agony transform into moans of ecstasy as your flesh is reshaped into something magnificent and terrible.</p>
+                <p class="cultist-speak">"Welcome to eternity, beautiful one. Your suffering has ended... but your service has just begun."</p>
+                <p class="horror-text">As the last of your human flesh is carved away, you realize you can no longer remember why you ever wanted to leave. You are home now, among the beautiful monsters.</p>
+                <p class="whisper">Looking in the mirror, you see your new face - a masterpiece of horror and beauty combined.</p>
+                <p><strong class="blood-text">Final Transformation Stats:</strong></p>
                 <p>Terror Endured: ${gameState.suspicion}/100</p>
-                <p>Hours Survived: ${gameState.round}</p>
-                <p class="scream">Welcome to the Theatre of Blood.</p>
+                <p>Survival: ${gameState.survival}/100</p>
+                <p>Hours in Hell: ${gameState.round}</p>
+                <p class="scream">You are beautiful now. Forever.</p>
             `;
             
             document.getElementById('game-over-content').innerHTML = winText;
-            document.getElementById('action-choice').classList.add('hidden');
+            document.getElementById('question-scene').classList.add('hidden');
             document.getElementById('result').classList.add('hidden');
             document.getElementById('game-over').classList.remove('hidden');
         }
@@ -570,20 +509,19 @@
         function gameOver(reason) {
             triggerJumpScare();
             const loseText = `
-                <h2 class="danger scream">💀 YOUR FLESH REMEMBERS 💀</h2>
+                <h2 class="danger scream">💀 THE THEATRE CLAIMS ANOTHER 💀</h2>
                 <p class="horror-text">${reason}</p>
-                <p class="blood-text">The last thing you hear is the wet sound of surgical instruments and your own muffled screams. The theatre claims another victim for its eternal performance...</p>
+                <p class="blood-text">Your screams join the eternal symphony of the damned. The theatre feeds on your terror, growing stronger with each victim...</p>
                 <p><strong class="blood-text">Final Moments:</strong></p>
-                <p>Forbidden Knowledge: ${gameState.knowledge}/6</p>
-                <p>Terror Accumulated: ${gameState.suspicion}/100</p>
+                <p>Terror Level: ${gameState.suspicion}/100</p>
+                <p>Survival: ${gameState.survival}/100</p>
                 <p>Hours Survived: ${gameState.round}</p>
-                <p class="whisper horror-text">Your face will make a beautiful addition to their collection...</p>
-                <p class="scream">Try again... if you dare return to the darkness.</p>
+                <p class="whisper horror-text">Your body becomes part of the theatre's decoration, a warning to future victims...</p>
+                <p class="scream">The show must go on... will you return for another performance?</p>
             `;
             
             document.getElementById('game-over-content').innerHTML = loseText;
-            document.getElementById('symbol-decode').classList.add('hidden');
-            document.getElementById('action-choice').classList.add('hidden');
+            document.getElementById('question-scene').classList.add('hidden');
             document.getElementById('result').classList.add('hidden');
             document.getElementById('game-over').classList.remove('hidden');
         }
@@ -591,52 +529,11 @@
         function restartGame() {
             gameState = {
                 suspicion: 0,
-                knowledge: 0,
+                survival: 100,
                 round: 1,
-                symbols: {
-                    '☠': 'death',
-                    '⸸': 'demands',
-                    '☾': 'moon',
-                    '🗡': 'sacrifice',
-                    '🕷': 'consume',
-                    '👁': 'witness',
-                    '🔥': 'burn',
-                    '💀': 'skull',
-                    '⚰': 'tomb',
-                    '🩸': 'blood'
-                },
-                knownSymbols: {},
-                phrases: [
-                    {
-                        text: '☠ ⸸ ☾ 🗡 ☠!',
-                        context: 'The fox-skull raises a ceremonial blade, others begin chanting faster as blood drips from the altar.',
-                        meaning: 'death demands moon sacrifice',
-                        correctActions: ['bow', 'speak'],
-                        wrongActions: ['gesture', 'wait']
-                    },
-                    {
-                        text: '🕷 👁 🔥 💀!',
-                        context: 'A figure with a sewn-on spider face points at you while others hold burning torches near human skulls.',
-                        meaning: 'consume witness with fire',
-                        correctActions: ['gesture', 'speak'],
-                        wrongActions: ['bow', 'wait']
-                    },
-                    {
-                        text: '⚰ 🩸 ☠ ⸸!',
-                        context: 'All cultists kneel before an open coffin filled with fresh blood, their stitched faces reflecting the crimson surface.',
-                        meaning: 'tomb blood death demands',
-                        correctActions: ['bow', 'speak'],
-                        wrongActions: ['gesture', 'wait']
-                    }
-                ],
-                currentPhrase: 0,
-                horrorEvents: [
-                    "A severed hand twitches on the floor near your feet...",
-                    "You notice fresh surgical scars on your own arms that weren't there before...",
-                    "The eye sockets of the skull-masked figure begin to bleed...",
-                    "A child's laughter echoes from beneath the stage...",
-                    "The temperature drops suddenly as frost forms on the blood-stained altar..."
-                ]
+                currentQuestionIndex: 0,
+                questions: gameState.questions, // Keep the same questions
+                horrorEvents: gameState.horrorEvents // Keep the same horror events
             };
             
             document.getElementById('game-over').classList.add('hidden');
@@ -648,15 +545,15 @@
         // Initialize display
         updateDisplay();
 
-        // Random horror ambience
+        // Enhanced horror ambience
         setInterval(() => {
-            if (Math.random() < 0.1) {
+            if (Math.random() < 0.15) {
                 document.body.style.animation = 'subtleFlicker 0.1s ease-in-out';
                 setTimeout(() => {
                     document.body.style.animation = 'subtleFlicker 3s infinite';
                 }, 100);
             }
-        }, 5000);
+        }, 3000);
     </script>
 </body>
 </html>
